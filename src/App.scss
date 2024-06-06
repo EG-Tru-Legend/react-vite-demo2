@@ -7,16 +7,14 @@
     font-family: "Poppins", sans-serif;
 }
 
-div.layout 
-{
+div.layout {
     background: red;
     min-height: 100vh;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto auto 1fr auto;
 
-    header
-    {
+    header {
         padding: 0 5px;
         background: black;
 
@@ -24,54 +22,57 @@ div.layout
         p.welcome {color: limegreen; }
     }
 
-    nav
-    {
+    nav {
         padding: 5px;
         background: limeGreen;
         display: flex;
         gap: 10px;
 
-        div.navItem a 
-        {
+        div.navItem a {
             color: white;
             text-decoration: none;
 
-            &:hover 
-            {
+            &:hover {
                 color: black;
             }
         }
     }
 
-    main 
-    {
+    main {
         padding: 20px;
         background: White;
 
-        div.cardContainer 
-        {
+        div.cardContainer {
             border: 1px solid lightGray;
             border-radius: 3px;
             padding: 20px;
             display: flex;
             flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
 
-        div.card 
-        {
-            width: 250px;
+        div.moduleCard {
+            width:250px;
+        }
+
+        div.studentCard {
+            width:200px;
+        }
+
+        div.card {
+            width: 100%;
+            height: 100%;
             padding: 10px;
-            margin:10px;
             border: 1px solid LightGrey;
             border-radius: 5px;
             box-shadow: 4px 4px 8px 4px rgba(70, 70, 70,0.3);
 
-            img { width: 100%; }
+            img { width: 100%; display: block; border-radius: 0px 0px 3px 3px}
         }
         }
     }
 
-    footer
-    {
+    footer {
         height:50px;
         padding: 0 5px;
         background: limeGreen;
