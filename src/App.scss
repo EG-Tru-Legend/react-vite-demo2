@@ -43,8 +43,31 @@ div.layout
         }
     }
 
-    main {
+    main 
+    {
+        padding: 20px;
+        background: White;
 
+        div.cardContainer 
+        {
+            border: 1px solid lightGray;
+            border-radius: 3px;
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+
+        div.card 
+        {
+            width: 250px;
+            padding: 10px;
+            margin:10px;
+            border: 1px solid LightGrey;
+            border-radius: 5px;
+            box-shadow: 4px 4px 8px 4px rgba(70, 70, 70,0.3);
+
+            img { width: 100%; }
+        }
+        }
     }
 
     footer
@@ -53,7 +76,7 @@ div.layout
         padding: 0 5px;
         background: limeGreen;
         display: flex;
-        align-items: centre;
+        align-items: center;
         justify-content: center;
 
         p.thankyou { color: white; }
