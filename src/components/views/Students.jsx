@@ -18,7 +18,7 @@ function Students() {
       UserYearName: "2022-23",
     }
     const loggedInUserGroup = 13;
-    const apiURL = `http://localhost:5000/api`;
+    const apiURL =  "https://softwarehub.uk/unibase/api";
     const myGroupEndPoint = `${apiURL}/users/groups/${loggedInUserGroup}`;
 
     // State -------------------------------------------------------------
