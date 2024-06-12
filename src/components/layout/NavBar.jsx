@@ -1,18 +1,19 @@
+import { NavLink } from "react-router-dom";
 import './NavBar.scss';
 
 function NavBar() {
     return (
         <nav>
             <div className="navItem">
-                <a to="/">Home</a>
+                <NavLink to="/">Home</NavLink>
             </div>
 
             <div className="navItem">
-                <a to="/modules">Modules</a>
+                <NavLink to="/modules">Modules</NavLink>
             </div>
 
             <div className="navItem">
-                <a to="/students">Students</a>
+                <NavLink to="/students">Students</NavLink>
             </div>
       </nav>
     );
