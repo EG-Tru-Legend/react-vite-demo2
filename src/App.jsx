@@ -6,8 +6,11 @@ import Students from "./components/views/Students.jsx";
 import PageNotFound from "./components/views/404.jsx";
 
 function App() {
+  // Initialisation ------------------------------------------               
   const loggedInUser = "Eesa";
- 
+ // State ----------------------------------------------------
+ // Handlers -------------------------------------------------
+ // View -----------------------------------------------------
   return (
     <BrowserRouter>
       <Layout loggedInUser={loggedInUser}>

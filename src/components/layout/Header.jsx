@@ -1,7 +1,11 @@
+import PropTypes from "prop-types";
 import './Header.scss'
 
 function Header(props) {
-
+    // Initialisation
+    // State
+    // Handlers
+    // View
     return (
         <header>
             <h1>Basic React Demo</h1>
@@ -9,5 +13,9 @@ function Header(props) {
       </header>
     );
 }
+
+Header.propTypes = {
+    loggedInUser: PropTypes.string.isRequired,
+};
 
 export default Header;
