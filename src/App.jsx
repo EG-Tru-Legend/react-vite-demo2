@@ -1,10 +1,8 @@
-import Header from "./Header.jsx";
-import NavBar from "./NavBar.jsx";
+import Layout from "./components/layout/Layout.jsx";
 import "./App.scss"
 
 function App() {
   const loggedInUser = "Eesa";
-
   const modulelist = [
     {
       ModuleID: 1,
@@ -87,7 +85,6 @@ function App() {
       ModuleImageURL: "https://images.freeimages.com/images/small-previews/402/rocket-in-the-museum-1450195.jpg"
     }
   ];
-
   const studentlist= [
     { "UserID": 275, "UserFirstname": "Sholeh", "UserLastname": "ABBAS", "UserEmail": "K2955214@kingston.ac.uk", "UserRegistered": 0, "UserLevel": 4, "UserYearID": 1, "UserUsertypeID": 2, "UserImageURL": "https://images.generated.photos/evdpMs0ZUOoMA0ACfCy98zzmy347YQxRmrPCWHp3v0g/rs:fit:256:256/czM6Ly9pY29uczgu/Z3Bob3Rvcy1wcm9k/LnBob3Rvcy92M18w/MzUzMTEyLmpwZw.jpg", "UserUsertypeName": "Student", "UserYearName": "2022-23" },
     { "UserID": 276, "UserFirstname": "Hashim", "UserLastname": "ABDALLAH", "UserEmail": "K1083353@kingston.ac.uk", "UserRegistered": 0, "UserLevel": 4, "UserYearID": 1, "UserUsertypeID": 2, "UserImageURL": "https://images.generated.photos/eL1-OlKDqGf1IaL_b2O8aSj7osDX_eFVHZEoJ0f3ZV0/rs:fit:256:256/czM6Ly9pY29uczgu/Z3Bob3Rvcy1wcm9k/LnBob3Rvcy92M18w/NzYwNjc0LmpwZw.jpg", "UserUsertypeName": "Student", "UserYearName": "2022-23" },
@@ -102,13 +99,8 @@ function App() {
   ];
 
   return (
-    <div className="layout">
-      <Header loggedInUser={loggedInUser}/>
-      <NavBar />
-
-      <main>
-
-      <h1>Homepage</h1>
+    <Layout loggedInUser={loggedInUser}>
+       <h1>Homepage</h1>
 
         <h1>Modules</h1>
         <div className="cardContainer">
@@ -143,14 +135,7 @@ function App() {
           })
         }
         </div>
-
-      </main>
-
-      <footer>
-        <p className="thankyou">Thank You For Using This System!</p>
-      </footer>
-
-    </div>
+    </Layout>
   )
 }
 
