@@ -1,4 +1,5 @@
 import Layout from "./components/layout/Layout.jsx";
+import { CardContainer, Card } from "./components/UI/Card.jsx";
 import "./App.scss"
 
 function App() {
@@ -103,38 +104,38 @@ function App() {
        <h1>Homepage</h1>
 
         <h1>Modules</h1>
-        <div className="cardContainer">
+        <CardContainer>
         {
           modulelist.map((module)=>{
             return(
               <div className='moduleCard' key={module.ModuleCode}>
-                <div className="card">
+                <Card>
                   <p>{module.ModuleCode}</p>
                   <p>{module.ModuleName}</p>
                   <img src ={module.ModuleImageURL}/>
-                </div>
+                </Card>
               </div>
             )
           })
         }
-        </div>
+        </CardContainer>
 
         <h1>Students</h1>
-        <div className="cardContainer">
+        <CardContainer>
         {
           studentlist.map((student)=>{
             return(
               <div className='studentCard' key={student.UserEmail}>
-                <div className="card">
+                <Card>
                   <p>{student.UserEmail.substring(0,8)}</p>
                   <p>{`${student.UserFirstname} ${student.UserLastname}`}</p>
                   <img src ={student.UserImageURL}/>
-                </div>
+                </Card>
               </div>
             )
           })
         }
-        </div>
+        </CardContainer>
     </Layout>
   )
 }
