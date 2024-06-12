@@ -32,6 +32,7 @@ function Modules() {
                 {modules.map((module) => <ModuleCard module={module} key={module.ModuleCode}/>)}
             </CardContainer>
             )}
+            <button>Add Module</button>
         </>
     );
 }
