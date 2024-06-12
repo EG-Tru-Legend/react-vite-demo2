@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { CardContainer, Card } from "../UI/Card.jsx";
+import { CardContainer } from "../UI/Card.jsx";
+import UserCard from "../entity/user/UserCard.jsx";
 import './Students.scss';
 
 function Students() {
-    // Initialisation ----------------------------------------------------
+    // Initialisation -----------------------------------------------------
     const newStudent = {
       UserFirstname: "Nathan",
       UserLastname: "Olsson",
@@ -43,31 +44,17 @@ function Students() {
     return (
         <>
           <h1>Students</h1>
-          {
-            !students
-            ? <p>Loading records ...</p>
-            :
-            <>
+ 
               <CardContainer>
-              {
-                students.map((student)=> {
-                return (
-                  <div className='studentCard' key={student.UserID}>
-                    <Card>
-                      <p>{student.UserEmail.substring(0,8)}</p>
-                      <p>{`${student.UserFirstname} ${student.UserLastname}`}</p>
-                      <img 
-                        src ={student.UserImageURL}
-                        alt={student.UserEmail.substring(0, 8)}
-                      />
-                    </Card>
-                  </div>
-                );
-              })}
+                {!students ? (
+                  <p>Loading records ...</p>
+                ) : students.length === 0 ? (
+                  <p>No records found.</p>
+                ) : (
+                  students.map((student) => <UserCard user ={student} key={student.UserID} />)
+                )}
             </CardContainer>
-            <button onClick={() => handleAdd(newStudent)}>Add student</button>
-            </>
-          }
+          <button onClick={() => handleAdd(newStudent)}>Add student</button>
         </>
     );
 }
