@@ -1,0 +1,20 @@
+$BorderGrey: LightGrey;
+
+div.moduleForm {
+   width: 100%;
+   padding: 20px;
+   border: 1px solid $BorderGrey;
+   border-radius: 5px;
+   display: flex;
+   flex-direction: column;
+   gap:20px;
+
+   div.FormTray {
+    width: 100%;
+
+    label, input, select {
+        display: block;
+        width: 100%;
+    }
+    }
+}

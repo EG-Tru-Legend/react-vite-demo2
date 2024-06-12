@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import Action from '../UI/Actions.jsx';
+import ModuleForm from "../entity/module/ModuleForm.jsx"
 import { CardContainer } from "../UI/Card.jsx";
 import ModuleCard from "../entity/module/ModuleCard.jsx";
 import './Modules.scss';
@@ -8,8 +10,11 @@ function Modules() {
     const loggedInUserGroup = 820;
     const apiURL =  "https://softwarehub.uk/unibase/api";
     const myModulesEndPoint = `${apiURL}/modules/leader/${loggedInUserGroup}`;
+
     // State -------------------------------------------------------------
     const [modules, setModules] = useState(null);
+    const [showForm, setShowForm] = useState(false);
+   
 
     const apiGet = async (endpoint) => {
       const response = await fetch(endpoint);
@@ -18,21 +23,31 @@ function Modules() {
     }
 
     useEffect(() => { apiGet(myModulesEndPoint) }, [myModulesEndPoint]);
+
     // Handlers ----------------------------------------------------------
+   const handleAdd = () => setShowForm(true);
+   const handleCancel = () => setShowForm(false);
+
     // View --------------------------------------------------------------
     return (
         <>
             <h1>Modules</h1>
-            {!modules ?(
+
+            <Action.Tray>
+              {!showForm && <Action.Add showText buttonText="Add new module" onClick={handleAdd}/>}
+            </Action.Tray>
+
+            {showForm && <ModuleForm onCancel={handleCancel} />}
+
+            {!modules ? (
               <p>Loading records ...</p>
-            ) : modules.length === 0? (
+            ) : modules.length === 0 ? (
               <p>No records found ...</p>
             ) : (
             <CardContainer>
                 {modules.map((module) => <ModuleCard module={module} key={module.ModuleCode}/>)}
             </CardContainer>
             )}
-            <button>Add Module</button>
         </>
     );
 }
