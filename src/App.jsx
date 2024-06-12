@@ -1,4 +1,5 @@
 import Header from "./Header.jsx";
+import NavBar from "./NavBar.jsx";
 import "./App.scss"
 
 function App() {
@@ -102,21 +103,8 @@ function App() {
 
   return (
     <div className="layout">
-      <Header />
-
-      <nav>
-        <div className="navItem">
-          <a to="/">Home</a>
-        </div>
-
-        <div className="navItem">
-          <a to="/modules">Modules</a>
-        </div>
-
-        <div className="navItem">
-          <a to="/students">Students</a>
-        </div>
-      </nav>
+      <Header loggedInUser={loggedInUser}/>
+      <NavBar />
 
       <main>
 
