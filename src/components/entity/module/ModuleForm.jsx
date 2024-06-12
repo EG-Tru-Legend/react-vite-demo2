@@ -28,6 +28,9 @@ function ModuleForm({ onCancel }) {
 
                 <label htmlFor="">Module Level</label>
                 <select name="ModuleLevel" value={module.ModuleLevel}>
+                    <option value="0" disabled>
+                        None slected
+                    </option>
                     {[3,4,5,6,7].map((level) => (
                         <option key={level}>{level}</option>
                     ))}
