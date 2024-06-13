@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Action from '../../UI/Actions.jsx';
 import './ModuleForm.scss';
@@ -9,10 +9,10 @@ const initialModule = {
     ModuleLevel: 0,
     ModuleYearID: null,
     ModuleLeaderID: null,
-    ModuleImageURL: "https://images.freeimages.com/images/small-previews/9b8/electronic-component",
+    ModuleImageURL: "https://images.freeimages.com/images/small-previews/9b8/electronic-components-2-1242738.jpg",
 };
 
-function ModuleForm({ onCancel }) {
+function ModuleForm({ onCancel, onSuccess }) {
     // Initialisation --------------------------------------------
     const conformance = {
         html2js: {
@@ -33,16 +33,55 @@ function ModuleForm({ onCancel }) {
         },
     };
 
+    const apiURL =  "https://softwarehub.uk/unibase/api";
+    const yearsEndPoint = `${apiURL}/years`;
+    const staffEndPoint = `${apiURL}/users/staff`;
+    const postModuleEndPoint = `${apiURL}/modules`;
+
     // State -----------------------------------------------------
     const [module, setModule] = useState(initialModule);
+    const [years, setyears] = useState(null);
+    const [staff, setStaff] = useState(null);
+
+    const apiGet = async (endpoint, setState) => {
+        const response = await fetch(endpoint);
+        const result = await response.json();
+        setState(result);
+      }
+
+      const apiPost = async (endpoint, record) => {
+        // Build Request Object
+        const request = {
+            method: 'POST',
+            body: JSON.stringify(record),
+            headers: { 'Content-type' : 'application/json' },
+        };
+
+        // Call the fetch
+        const response = await fetch(endpoint, request);
+        const result = await response.json();
+        return response.status >= 200 && response.status < 300
+        ? { isSuccess : true }
+        : { isSuccess : false, message : result.message };
+      }
+  
+      useEffect(() => { apiGet(yearsEndPoint, setyears) }, [yearsEndPoint]);
+      useEffect(() => { apiGet(staffEndPoint, setStaff) }, [staffEndPoint]);
+
     // Handler ---------------------------------------------------
     const handleChange = (event) => {
         const { name, value } = event.target;
         setModule({...module, [name]: conformance.html2js[name](value)});
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         console.log(`Module=[${JSON.stringify(module)}]`)
+
+        const result = await apiPost(postModuleEndPoint, module);
+
+        if (result.isSuccess) {
+            onSuccess();
+        } else alert(result.message);
     };
 
     // View ------------------------------------------------------
@@ -65,14 +104,14 @@ function ModuleForm({ onCancel }) {
                     <input 
                     type="text" 
                     name="ModuleCode" 
-                    value={conformance.js2html["ModuleName"](module.ModuleCode)} 
+                    value={conformance.js2html["ModuleCode"](module.ModuleCode)} 
                     onChange={handleChange}
                     />
                 </label>
 
                 <label>
                     Module Level
-                    <select name="ModuleLevel" value={conformance.js2html["ModuleName"](module.ModuleLevel)} onChange={handleChange}>
+                    <select name="ModuleLevel" value={conformance.js2html["ModuleLevel"](module.ModuleLevel)} onChange={handleChange}>
                     <option value="0" disabled>
                         None slected
                     </option>
@@ -80,6 +119,54 @@ function ModuleForm({ onCancel }) {
                         <option key={level}>{level}</option>
                     ))}
                     </select>
+                </label>
+
+                <label>
+                    Module Year
+                    {!years ? (
+                    <p>Loading records ...</p> ) :
+                    <select name="ModuleYearID" value={conformance.js2html["ModuleYearID"](module.ModuleYearID)} onChange={handleChange}>
+                    <option value="0">
+                        None slected
+                    </option>
+                    {years.map((year) => (
+                        <option key={year.YearID} value={year.YearID}>{year.YearName}</option>
+                    ))}
+                    </select>
+                    }
+                </label>
+
+                <label>
+                    Module leader
+                    {!staff ? (
+                    <p>Loading records ...</p> 
+                ) : (
+                    <select 
+                    name="ModuleLeaderID" 
+                    value={conformance.js2html["ModuleLeaderID"](module.ModuleLeaderID)} 
+                    onChange={handleChange}
+                    >
+                    <option value="0">
+                        None slected
+                    </option>
+                    {staff.map((member) => (
+                        <option key={member.UserID} value={member.UserID}> 
+                        {`${member.UserFirstname} ${member.UserLastname}`}
+                    </option>
+                    ))}
+                    </select>
+                    )}
+                </label>
+
+                <label>
+                    Module Image
+                    <input 
+                    type="text" 
+                    id="ModuleImageURL" 
+                    name="ModuleImageURL" 
+                    value={conformance.js2html["ModuleImageURL"](module.ModuleImageURL)} 
+                    onChange={handleChange}
+                    />
                 </label>
             </div>
 
@@ -94,6 +181,7 @@ function ModuleForm({ onCancel }) {
 
 ModuleForm.propTypes = {
     onCancel: PropTypes.func,
+    onSuccess: PropTypes.func,
 };
 
 export default ModuleForm;

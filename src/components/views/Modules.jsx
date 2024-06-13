@@ -25,8 +25,12 @@ function Modules() {
     useEffect(() => { apiGet(myModulesEndPoint) }, [myModulesEndPoint]);
 
     // Handlers ----------------------------------------------------------
-   const handleAdd = () => setShowForm(true);
-   const handleCancel = () => setShowForm(false);
+    const handleAdd = () => setShowForm(true);
+    const handleCancel = () => setShowForm(false);
+    const handleSuccess = async() => {
+      handleCancel();
+      await apiGet(myModulesEndPoint);
+   };
 
     // View --------------------------------------------------------------
     return (
@@ -37,7 +41,7 @@ function Modules() {
               {!showForm && <Action.Add showText buttonText="Add new module" onClick={handleAdd}/>}
             </Action.Tray>
 
-            {showForm && <ModuleForm onCancel={handleCancel} />}
+            {showForm && <ModuleForm onCancel={handleCancel} onSuccess={handleSuccess}/>}
 
             {!modules ? (
               <p>Loading records ...</p>
@@ -45,7 +49,7 @@ function Modules() {
               <p>No records found ...</p>
             ) : (
             <CardContainer>
-                {modules.map((module) => <ModuleCard module={module} key={module.ModuleCode}/>)}
+                {modules.map((module) => <ModuleCard module={module} key={module.ModuleID}/>)}
             </CardContainer>
             )}
         </>
