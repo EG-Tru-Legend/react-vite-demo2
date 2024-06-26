@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import {useAuth} from '../auth/useAuth.jsx';
 import Action from '../UI/Actions.jsx';
 import ModuleForm from "../entity/module/ModuleForm.jsx"
 import { CardContainer } from "../UI/Card.jsx";
@@ -7,9 +8,11 @@ import './Modules.scss';
 
 function Modules() {
     // Initialisation ----------------------------------------------------
-    const loggedInUserGroup = 820;
+    const {loggedInUser} =  useAuth();
     const apiURL =  "https://softwarehub.uk/unibase/api";
-    const myModulesEndPoint = `${apiURL}/modules/leader/${loggedInUserGroup}`;
+    const myModulesEndPoint = loggedInUser.UserUsertypeID === 1 
+      ? `${apiURL}/modules/leader/${loggedInUser.UserID}`
+      : `${apiURL}/modules/users/${loggedInUser.UserID}`;
 
     // State -------------------------------------------------------------
     const [modules, setModules] = useState(null);
