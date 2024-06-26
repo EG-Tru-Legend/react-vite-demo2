@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import API from '../api/API.js';
+import useLoad from '../api/useLoad.js';
 import { CardContainer } from "../UI/Card.jsx";
 import UserCard from "../entity/user/UserCard.jsx";
 import './Students.scss';
@@ -23,17 +22,7 @@ function Students() {
     const myGroupEndPoint = `/users/groups/${loggedInUserGroup}`;
 
     // State -------------------------------------------------------------
-    const [students, setStudents] = useState(null);
-    const [loadingMessage, setLoadingMessage] = useState('Loading records ...');
-
-    const loadRecords = async (endpoint) => {
-      const response = await API.get(endpoint);
-      response.isSuccess
-       ? setStudents(response.result)
-       : setLoadingMessage(response.message);
-    };
-
-    useEffect(() => { loadRecords(myGroupEndPoint) }, [myGroupEndPoint]);
+    const [students, setStudents, loadingMessage ] = useLoad(myGroupEndPoint);
 
     // Handlers ----------------------------------------------------------
     const handleAdd = (student) => {

@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {useAuth} from '../auth/useAuth.jsx';
-import API from '../api/API.js';
+import useLoad from '../api/useLoad.js';
 import Action from '../UI/Actions.jsx';
 import ModuleForm from "../entity/module/ModuleForm.jsx"
 import { CardContainer } from "../UI/Card.jsx";
@@ -15,26 +15,15 @@ function Modules() {
       : `/modules/users/${loggedInUser.UserID}`;
 
     // State -------------------------------------------------------------
-    const [modules, setModules] = useState(null);
-    const [loadingMessage, setLoadingMessage] = useState('Loading records ...');
+    const [modules, loadingMessage, loadModules] = useLoad(myModulesEndPoint);
     const [showForm, setShowForm] = useState(false);
-   
-
-    const loadRecords = async (endpoint) => {
-      const response = await API.get(endpoint);
-      response.isSuccess
-       ? setModules(response.result)
-       : setLoadingMessage(response.message);
-    };
-
-    useEffect(() => { loadRecords(myModulesEndPoint) }, [myModulesEndPoint]);
 
     // Handlers ----------------------------------------------------------
     const handleAdd = () => setShowForm(true);
     const handleCancel = () => setShowForm(false);
     const handleSuccess = async() => {
       handleCancel();
-      await loadRecords(myModulesEndPoint);
+      await loadModules(myModulesEndPoint);
    };
 
     // View --------------------------------------------------------------

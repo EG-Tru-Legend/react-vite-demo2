@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import API from '../../api/API.js';
+import useLoad from '../../api/useLoad.js';
 import PropTypes from 'prop-types';
 import Action from '../../UI/Actions.jsx';
 import './ModuleForm.scss';
@@ -40,20 +41,8 @@ function ModuleForm({ onCancel, onSuccess }) {
 
     // State -----------------------------------------------------
     const [module, setModule] = useState(initialModule);
-    const [years, setyears] = useState(null);
-    const [loadingYearsMessage, setLoadingYearsMessage] = useState('Loading records ...');
-    const [staff, setStaff] = useState(null);
-    const [loadingStaffMessage, setLoadingStaffMessage] = useState('Loading records ...');
-
-    const loadRecords = async (endpoint, setState, setLoadingMessage) => {
-        const response = await API.get(endpoint);
-        response.isSuccess
-         ? setState(response.result)
-         : setLoadingMessage(response.message);
-    };
-
-    useEffect(() => { loadRecords(yearsEndPoint, setyears, setLoadingYearsMessage) }, [yearsEndPoint]);
-    useEffect(() => { loadRecords(staffEndPoint, setStaff, setLoadingStaffMessage) }, [staffEndPoint]);
+    const [years, loadingYearsMessage] = useLoad(yearsEndPoint);
+    const [staff, loadingStaffMessage] = useLoad(staffEndPoint);
 
     // Handler ---------------------------------------------------
     const handleChange = (event) => {
