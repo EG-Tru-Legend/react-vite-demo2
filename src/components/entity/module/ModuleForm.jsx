@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import API from '../../api/API.js';
 import PropTypes from 'prop-types';
 import Action from '../../UI/Actions.jsx';
 import './ModuleForm.scss';
@@ -33,40 +34,26 @@ function ModuleForm({ onCancel, onSuccess }) {
         },
     };
 
-    const apiURL =  "https://softwarehub.uk/unibase/api";
-    const yearsEndPoint = `${apiURL}/years`;
-    const staffEndPoint = `${apiURL}/users/staff`;
-    const postModuleEndPoint = `${apiURL}/modules`;
+    const yearsEndPoint = `/years`;
+    const staffEndPoint = `/users/staff`;
+    const postModuleEndPoint = `modules`;
 
     // State -----------------------------------------------------
     const [module, setModule] = useState(initialModule);
     const [years, setyears] = useState(null);
+    const [loadingYearsMessage, setLoadingYearsMessage] = useState('Loading records ...');
     const [staff, setStaff] = useState(null);
+    const [loadingStaffMessage, setLoadingStaffMessage] = useState('Loading records ...');
 
-    const apiGet = async (endpoint, setState) => {
-        const response = await fetch(endpoint);
-        const result = await response.json();
-        setState(result);
-      }
+    const loadRecords = async (endpoint, setState, setLoadingMessage) => {
+        const response = await API.get(endpoint);
+        response.isSuccess
+         ? setState(response.result)
+         : setLoadingMessage(response.message);
+    };
 
-      const apiPost = async (endpoint, record) => {
-        // Build Request Object
-        const request = {
-            method: 'POST',
-            body: JSON.stringify(record),
-            headers: { 'Content-type' : 'application/json' },
-        };
-
-        // Call the fetch
-        const response = await fetch(endpoint, request);
-        const result = await response.json();
-        return response.status >= 200 && response.status < 300
-        ? { isSuccess : true }
-        : { isSuccess : false, message : result.message };
-      }
-  
-      useEffect(() => { apiGet(yearsEndPoint, setyears) }, [yearsEndPoint]);
-      useEffect(() => { apiGet(staffEndPoint, setStaff) }, [staffEndPoint]);
+    useEffect(() => { loadRecords(yearsEndPoint, setyears, setLoadingYearsMessage) }, [yearsEndPoint]);
+    useEffect(() => { loadRecords(staffEndPoint, setStaff, setLoadingStaffMessage) }, [staffEndPoint]);
 
     // Handler ---------------------------------------------------
     const handleChange = (event) => {
@@ -77,7 +64,7 @@ function ModuleForm({ onCancel, onSuccess }) {
     const handleSubmit = async () => {
         console.log(`Module=[${JSON.stringify(module)}]`)
 
-        const result = await apiPost(postModuleEndPoint, module);
+        const result = await API.post(postModuleEndPoint, module);
 
         if (result.isSuccess) {
             onSuccess();
@@ -124,7 +111,7 @@ function ModuleForm({ onCancel, onSuccess }) {
                 <label>
                     Module Year
                     {!years ? (
-                    <p>Loading records ...</p> ) :
+                    <p>{loadingYearsMessage}</p> ) :
                     <select name="ModuleYearID" value={conformance.js2html["ModuleYearID"](module.ModuleYearID)} onChange={handleChange}>
                     <option value="0">
                         None slected
@@ -139,7 +126,7 @@ function ModuleForm({ onCancel, onSuccess }) {
                 <label>
                     Module leader
                     {!staff ? (
-                    <p>Loading records ...</p> 
+                    <p>{loadingStaffMessage}</p> 
                 ) : (
                     <select 
                     name="ModuleLeaderID" 
