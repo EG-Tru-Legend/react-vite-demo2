@@ -1,7 +1,9 @@
 import { useState } from 'react';
-import API from '../../api/API.js';
-import useLoad from '../../api/useLoad.js';
 import PropTypes from 'prop-types';
+import { useModal } from '../../UI/Modal.jsx';
+import { Confirm, Error } from '../../UI/Notififcations.jsx';
+import useLoad from '../../api/useLoad.js';
+import API from '../../api/API.js';
 import Action from '../../UI/Actions.jsx';
 import './ModuleForm.scss';
 
@@ -43,6 +45,8 @@ function ModuleForm({ onCancel, onSuccess }) {
     const [module, setModule] = useState(initialModule);
     const [years, loadingYearsMessage] = useLoad(yearsEndPoint);
     const [staff, loadingStaffMessage] = useLoad(staffEndPoint);
+    const [showConfirm, confirmContent, openConfirm, closeConfirm] = useModal(false);
+    const [showError, errorContent, openError, closeError] = useModal(false);
 
     // Handler ---------------------------------------------------
     const handleChange = (event) => {
@@ -50,18 +54,27 @@ function ModuleForm({ onCancel, onSuccess }) {
         setModule({...module, [name]: conformance.html2js[name](value)});
     };
 
+    const handleConfirm = () => openConfirm('Are you sure you want to create this module?');
+
     const handleSubmit = async () => {
-        console.log(`Module=[${JSON.stringify(module)}]`)
-
+        //console.log(`Module=[${JSON.stringify(module)}]`)
         const result = await API.post(postModuleEndPoint, module);
-
-        if (result.isSuccess) {
-            onSuccess();
-        } else alert(result.message);
+        if (result.isSuccess) onSuccess();
+        else openError(result.message);
     };
 
     // View ------------------------------------------------------
     return (
+        <>
+        <Confirm 
+            show={showConfirm} 
+            message = {confirmContent} 
+            onConfirm={handleSubmit} 
+            onDismiss={closeConfirm} 
+        />
+
+        <Error show={showError} message = {errorContent} onDismiss={closeError} />
+
         <div className="moduleForm">
             <div className='FormTray'>
                 <label>
@@ -147,11 +160,12 @@ function ModuleForm({ onCancel, onSuccess }) {
             </div>
 
             <Action.Tray>
-              <Action.Submit showText onClick={handleSubmit}/>
+              <Action.Submit showText onClick={handleConfirm}/>
               <Action.Cancel showText buttonText="Cancel Form" onClick={onCancel}/>
             </Action.Tray>
 
         </div>
+        </>
     );
 }
 

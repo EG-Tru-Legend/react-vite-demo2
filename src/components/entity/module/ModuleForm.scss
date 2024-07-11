@@ -2,6 +2,7 @@ $BorderGrey: LightGrey;
 
 div.moduleForm {
    width: 100%;
+   min-width: 300px;
    padding: 20px;
    border: 1px solid $BorderGrey;
    border-radius: 5px;
