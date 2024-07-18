@@ -8,14 +8,12 @@ export function Alert({ show, message, onDismiss }) {
     // Handlers ----------------------------------------------------------
     // View --------------------------------------------------------------
     return (
-        <div className='notificationAlert'>
-            <Modal show={show} title='Alert'>
+            <Modal show={show} title='Alert' modalPaneClass ='notificationAlert'>
                 <p>{message}</p>
                 <Action.Tray>
                     <Action.Dismiss showText onClick={onDismiss} />
                 </Action.Tray>
             </Modal>
-        </div>
     );
 }
 
@@ -23,17 +21,19 @@ export function Confirm({ show, message, onConfirm, onDismiss }) {
     // Initialisation ----------------------------------------------------
     // State -------------------------------------------------------------
     // Handlers ----------------------------------------------------------
+    const handleDismiss = () => {
+        onConfirm();
+        onDismiss();
+    };
     // View --------------------------------------------------------------
     return (
-        <div className='notificationConfirm'>
-            <Modal show={show} title='Confirmation needed'>
+            <Modal show={show} title='Confirmation needed' modalPaneClass ='notificationConfirm'>
                 <p>{message}</p>
                 <Action.Tray>
-                    <Action.Yes showText onClick={onConfirm} />
+                    <Action.Yes showText onClick={handleDismiss} />
                     <Action.Dismiss showText onClick={onDismiss} />
                 </Action.Tray>
             </Modal>
-        </div>
     );
 }
 
@@ -43,13 +43,11 @@ export function Error({ show, message, onDismiss }) {
     // Handlers ----------------------------------------------------------
     // View --------------------------------------------------------------
     return (
-        <div className='notificationError'>
-            <Modal show={show} title='Error Detected'>
+            <Modal show={show} title='Error Detected' modalPaneClass ='notificationError'>
                 <p>{message}</p>
                 <Action.Tray>
                     <Action.Dismiss showText onClick={onDismiss} />
                 </Action.Tray>
             </Modal>
-        </div>
     );
 }

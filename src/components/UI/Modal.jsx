@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import './Modal.scss';
 
-export function Modal({ show, title, children }) {
+export function Modal({ show, title, modalPaneClass, children }) {
     // Initialisation ----------------------------------------------------
     // State -------------------------------------------------------------
     // Handlers ----------------------------------------------------------
     // View --------------------------------------------------------------
     return ( show ? (
         <div className="ModalOverlay">
-            <div className='ModalPane'>
+            <div className={`ModalPane ${modalPaneClass}`}>
                 <header>
                     <p>{title}</p>
                 </header>
