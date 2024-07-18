@@ -1,9 +1,5 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useModal } from '../../UI/Modal.jsx';
-import { Confirm, Error } from '../../UI/Notififcations.jsx';
-import useLoad from '../../api/useLoad.js';
-import API from '../../api/API.js';
 import Action from '../../UI/Actions.jsx';
 import './ModuleForm.scss';
 
@@ -16,7 +12,7 @@ const initialModule = {
     ModuleImageURL: "https://images.freeimages.com/images/small-previews/9b8/electronic-components-2-1242738.jpg",
 };
 
-function ModuleForm({ onCancel, onSuccess }) {
+function ModuleForm({ onSubmit, onCancel, dropdowns }) {
     // Initialisation --------------------------------------------
     const conformance = {
         html2js: {
@@ -37,16 +33,8 @@ function ModuleForm({ onCancel, onSuccess }) {
         },
     };
 
-    const yearsEndPoint = `/years`;
-    const staffEndPoint = `/users/staff`;
-    const postModuleEndPoint = `modules`;
-
     // State -----------------------------------------------------
     const [module, setModule] = useState(initialModule);
-    const [years, loadingYearsMessage] = useLoad(yearsEndPoint);
-    const [staff, loadingStaffMessage] = useLoad(staffEndPoint);
-    const [showConfirm, confirmContent, openConfirm, closeConfirm] = useModal(false);
-    const [showError, errorContent, openError, closeError] = useModal(false);
 
     // Handler ---------------------------------------------------
     const handleChange = (event) => {
@@ -54,27 +42,13 @@ function ModuleForm({ onCancel, onSuccess }) {
         setModule({...module, [name]: conformance.html2js[name](value)});
     };
 
-    const handleConfirm = () => openConfirm('Are you sure you want to create this module?');
-
-    const handleSubmit = async () => {
-        //console.log(`Module=[${JSON.stringify(module)}]`)
-        const result = await API.post(postModuleEndPoint, module);
-        if (result.isSuccess) onSuccess();
-        else openError(result.message);
-    };
+    const handleSubmit = () => onSubmit(module);
 
     // View ------------------------------------------------------
+    const years = dropdowns.years;
+    const staff = dropdowns.staff;
     return (
         <>
-        <Confirm 
-            show={showConfirm} 
-            message = {confirmContent} 
-            onConfirm={handleSubmit} 
-            onDismiss={closeConfirm} 
-        />
-
-        <Error show={showError} message = {errorContent} onDismiss={closeError} />
-
         <div className="moduleForm">
             <div className='FormTray'>
                 <label>
@@ -112,13 +86,13 @@ function ModuleForm({ onCancel, onSuccess }) {
 
                 <label>
                     Module Year
-                    {!years ? (
-                    <p>{loadingYearsMessage}</p> ) :
+                    {!years.list ? (
+                    <p>{years.loadingMessage}</p> ) :
                     <select name="ModuleYearID" value={conformance.js2html["ModuleYearID"](module.ModuleYearID)} onChange={handleChange}>
                     <option value="0">
                         None slected
                     </option>
-                    {years.map((year) => (
+                    {years.list.map((year) => (
                         <option key={year.YearID} value={year.YearID}>{year.YearName}</option>
                     ))}
                     </select>
@@ -127,8 +101,8 @@ function ModuleForm({ onCancel, onSuccess }) {
 
                 <label>
                     Module leader
-                    {!staff ? (
-                    <p>{loadingStaffMessage}</p> 
+                    {!staff.list ? (
+                    <p>{staff.loadingMessage}</p> 
                 ) : (
                     <select 
                     name="ModuleLeaderID" 
@@ -138,7 +112,7 @@ function ModuleForm({ onCancel, onSuccess }) {
                     <option value="0">
                         None slected
                     </option>
-                    {staff.map((member) => (
+                    {staff.list.map((member) => (
                         <option key={member.UserID} value={member.UserID}> 
                         {`${member.UserFirstname} ${member.UserLastname}`}
                     </option>
@@ -160,7 +134,7 @@ function ModuleForm({ onCancel, onSuccess }) {
             </div>
 
             <Action.Tray>
-              <Action.Submit showText onClick={handleConfirm}/>
+              <Action.Submit showText onClick={handleSubmit}/>
               <Action.Cancel showText buttonText="Cancel Form" onClick={onCancel}/>
             </Action.Tray>
 
