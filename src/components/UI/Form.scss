@@ -1,0 +1,82 @@
+$BorderGrey: LightGrey;
+$Red: #edafb8; //rose
+$DarkRed: darken($Red, 20%); 
+$Green: #29e7cd; //cyan
+$DarkGreen: darken($Green, 10%); 
+
+div.Form {
+    width: 100%;
+    min-width: 300px;
+    padding: 20px;
+    border: 1px solid $BorderGrey;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    gap:20px;
+
+    div.FormTray {
+        margin-bottom: 20px;
+
+        label.FormLabel {
+            font-weight: 600;
+        }
+
+        width: 100%;
+
+        div.FormItem {
+
+    
+        label, 
+        input, 
+        select {
+            display: block;
+            width: 100%;
+        }
+    
+        select, 
+        input {
+            width: 100%;
+            padding: 3px;
+            margin: 1px 0;
+            font-size: 100%;
+            border-radius: 0px;
+            border: 1px solid $BorderGrey;
+            background: white;
+    
+            &:hover,
+            &:focus {
+                outline-width: 1px;
+                outline-style: solid;
+                border-width: 1px;
+                border-style: solid;
+            }
+            &:hover {
+                border-color: $BorderGrey;
+                outline-color: $BorderGrey;
+            }
+    
+            $Green: #29e7cd; //cyan
+            $DarkGreen: darken($Green, 10%);
+    
+            &:focus {
+                border-color: $DarkGreen;
+                outline-color: $DarkGreen;
+            }
+        }
+
+        p.FormAdvice {
+            color: $DarkGreen;
+            font-weight: 400;
+            font-size: 90%;
+        }
+
+        p.FormError {
+            color: $DarkRed;
+            font-weight: 400;
+            font-size: 90%;
+        }
+
+
+        }
+        }
+}

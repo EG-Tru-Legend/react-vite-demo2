@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import Action from '../../UI/Actions.jsx';
-import './ModuleForm.scss';
+import Form from '../../UI/Form.jsx';
 
 const initialModule = {
     ModuleName: null,
@@ -48,11 +47,9 @@ function ModuleForm({ onSubmit, onCancel, dropdowns }) {
     const years = dropdowns.years;
     const staff = dropdowns.staff;
     return (
-        <>
-        <div className="moduleForm">
-            <div className='FormTray'>
-                <label>
-                    Module Name
+        <Form onSubmit={handleSubmit} onCancel={onCancel}>
+
+                <Form.Item label= "Module Name" advice="Some advice string" error="Some error string"> 
                     <input 
                     type="text" 
                     id="ModuleName" 
@@ -60,20 +57,20 @@ function ModuleForm({ onSubmit, onCancel, dropdowns }) {
                     value={conformance.js2html["ModuleName"](module.ModuleName)} 
                     onChange={handleChange}
                     />
-                </label>
+                </Form.Item>
 
-                <label>
-                    Module Code
+                <Form.Item label= "Module Code"> 
                     <input 
                     type="text" 
                     name="ModuleCode" 
                     value={conformance.js2html["ModuleCode"](module.ModuleCode)} 
                     onChange={handleChange}
                     />
-                </label>
+                </Form.Item>
 
-                <label>
-                    Module Level
+
+
+                <Form.Item label= "Module Level"> 
                     <select name="ModuleLevel" value={conformance.js2html["ModuleLevel"](module.ModuleLevel)} onChange={handleChange}>
                     <option value="0" disabled>
                         None slected
@@ -82,10 +79,10 @@ function ModuleForm({ onSubmit, onCancel, dropdowns }) {
                         <option key={level}>{level}</option>
                     ))}
                     </select>
-                </label>
+                </Form.Item>
 
-                <label>
-                    Module Year
+
+                <Form.Item label= "Module Year"> 
                     {!years.list ? (
                     <p>{years.loadingMessage}</p> ) :
                     <select name="ModuleYearID" value={conformance.js2html["ModuleYearID"](module.ModuleYearID)} onChange={handleChange}>
@@ -97,10 +94,10 @@ function ModuleForm({ onSubmit, onCancel, dropdowns }) {
                     ))}
                     </select>
                     }
-                </label>
+                </Form.Item>
 
-                <label>
-                    Module leader
+
+                <Form.Item label= "Module leader"> 
                     {!staff.list ? (
                     <p>{staff.loadingMessage}</p> 
                 ) : (
@@ -119,10 +116,10 @@ function ModuleForm({ onSubmit, onCancel, dropdowns }) {
                     ))}
                     </select>
                     )}
-                </label>
+                </Form.Item>
 
-                <label>
-                    Module Image
+
+                <Form.Item label= "Module Image"> 
                     <input 
                     type="text" 
                     id="ModuleImageURL" 
@@ -130,16 +127,9 @@ function ModuleForm({ onSubmit, onCancel, dropdowns }) {
                     value={conformance.js2html["ModuleImageURL"](module.ModuleImageURL)} 
                     onChange={handleChange}
                     />
-                </label>
-            </div>
+                </Form.Item>
 
-            <Action.Tray>
-              <Action.Submit showText onClick={handleSubmit}/>
-              <Action.Cancel showText buttonText="Cancel Form" onClick={onCancel}/>
-            </Action.Tray>
-
-        </div>
-        </>
+        </Form>
     );
 }
 
