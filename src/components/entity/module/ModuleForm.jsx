@@ -32,8 +32,44 @@ function ModuleForm({ onSubmit, onCancel, dropdowns }) {
         },
     };
 
+    const validation = {
+    isValid: {
+        ModuleName: (name) => name.length > 8,
+        ModuleCode: (code) => /^\D{2}\d{4}$/.test(code),
+        ModuleLevel: (level) => level > 2 && level < 8,
+        ModuleYearID: (id) => id > 0,
+        ModuleLeaderID: (id) => id == null || id > 0,
+        //ModuleImageURL: (url) => //.test(url) ,
+    },
+    errorMessage: {
+        ModuleName: 'Module name is too short',
+        ModuleCode: 'Module Code is not in a valid format',
+        ModuleLevel: 'Invalid module level',
+        ModuleYearID: 'No delivery year has been selected',
+        ModuleLeaderID: 'Invalid module leader selected',
+        ModuleImageURL: 'The URL entered is not a valid URL string',
+    },
+};
+
     // State -----------------------------------------------------
     const [module, setModule] = useState(initialModule);
+    const [errors, setErrors] = useState(
+       Object.keys(validation.isValid).reduce( (accum,key) => ({...accum, [key]: null}),{})
+    );
+
+    const isValidRecord = (record) => {
+        let isRecordValid = true;
+        Object.keys(validation.isValid).forEach((key) => {
+            if(validation.isValid[key](module[key])){
+                errors[key] = null;
+            }
+            else {
+                errors[key] = validation.errorMessage[key];
+                isRecordValid = false;
+            }
+        } );
+        return isRecordValid
+    };
 
     // Handler ---------------------------------------------------
     const handleChange = (event) => {
@@ -41,15 +77,17 @@ function ModuleForm({ onSubmit, onCancel, dropdowns }) {
         setModule({...module, [name]: conformance.html2js[name](value)});
     };
 
-    const handleSubmit = () => onSubmit(module);
+    const handleSubmit = () => {
+        isValidRecord(module) && onSubmit(module);
+        setErrors(...errors);
+    };
 
     // View ------------------------------------------------------
     const years = dropdowns.years;
     const staff = dropdowns.staff;
     return (
         <Form onSubmit={handleSubmit} onCancel={onCancel}>
-
-                <Form.Item label= "Module Name" advice="Some advice string" error="Some error string"> 
+                <Form.Item label= "Module Name" error={errors.ModuleName}> 
                     <input 
                     type="text" 
                     id="ModuleName" 
@@ -59,7 +97,7 @@ function ModuleForm({ onSubmit, onCancel, dropdowns }) {
                     />
                 </Form.Item>
 
-                <Form.Item label= "Module Code"> 
+                <Form.Item label= "Module Code" error={errors.ModuleCode}> 
                     <input 
                     type="text" 
                     name="ModuleCode" 
@@ -70,7 +108,7 @@ function ModuleForm({ onSubmit, onCancel, dropdowns }) {
 
 
 
-                <Form.Item label= "Module Level"> 
+                <Form.Item label= "Module Level" error={errors.ModuleLevel}> 
                     <select name="ModuleLevel" value={conformance.js2html["ModuleLevel"](module.ModuleLevel)} onChange={handleChange}>
                     <option value="0" disabled>
                         None slected
@@ -82,7 +120,7 @@ function ModuleForm({ onSubmit, onCancel, dropdowns }) {
                 </Form.Item>
 
 
-                <Form.Item label= "Module Year"> 
+                <Form.Item label= "Module Year" error={errors.ModuleYearID}> 
                     {!years.list ? (
                     <p>{years.loadingMessage}</p> ) :
                     <select name="ModuleYearID" value={conformance.js2html["ModuleYearID"](module.ModuleYearID)} onChange={handleChange}>
@@ -97,7 +135,7 @@ function ModuleForm({ onSubmit, onCancel, dropdowns }) {
                 </Form.Item>
 
 
-                <Form.Item label= "Module leader"> 
+                <Form.Item label= "Module leader" error={errors.ModuleLeaderID}> 
                     {!staff.list ? (
                     <p>{staff.loadingMessage}</p> 
                 ) : (
@@ -119,7 +157,7 @@ function ModuleForm({ onSubmit, onCancel, dropdowns }) {
                 </Form.Item>
 
 
-                <Form.Item label= "Module Image"> 
+                <Form.Item label= "Module Image" error={errors.ModuleImageURL}> 
                     <input 
                     type="text" 
                     id="ModuleImageURL" 
